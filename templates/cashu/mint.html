@@ -1,0 +1,151 @@
+{% extends "public.html" %} {% block page %} {% raw %}
+<template>
+  <div class="row q-col-gutter-md justify-center">
+    <div class="col-12 col-md-7 col-lg-6 q-gutter-y-md">
+      <q-card class="q-pa-lg q-mb-xl">
+        <q-card-section class="q-pa-none">
+          <center>
+            <q-img
+              src="/cashu/static/image/cashu.png"
+              spinner-color="white"
+              style="max-width: 20%; border-radius: 50%"
+            ></q-img>
+            <h4 class="q-mt-sm q-mb-md">
+              {% endraw %}{{ mint_name }}{% raw %}
+            </h4>
+            <h6 class="q-mb-md">Open mint in a wallet</h6>
+            <q-btn
+              outline
+              dense
+              size="md"
+              class="q-px-sm q-py-xs"
+              icon="account_balance_wallet"
+              color="($q.dark.isActive) ? 'green-7' : 'green-5'"
+              type="a"
+              :href="'https://wallet.cashu.me?mint='+mintURL.base_url+'/cashu/api/v1/{% endraw %}{{
+                mint_id
+              }}{% raw %}'"
+              target="_blank"
+              ><q-tooltip>Open in Cashu.me</q-tooltip>Cashu.me</q-btn
+            >
+            <q-btn
+              outline
+              dense
+              class="q-px-sm q-py-xs"
+              size="md"
+              icon="account_balance_wallet"
+              color="($q.dark.isActive) ? 'yellow-7' : 'yellow-5'"
+              type="a"
+              :href="'https://wallet.nutstash.app?mint='+mintURL.base_url+'/cashu/api/v1/{% endraw %}{{
+                mint_id
+              }}{% raw %}'"
+              target="_blank"
+              ><q-tooltip>Open in Nutstash</q-tooltip>Nutstash</q-btn
+            >
+            <br /><br />
+            <h6 class="q-my-sm">Mint URL</h6>
+            <q-input
+              outlined
+              readonly
+              :label="mintURL.base_url + '/cashu/api/v1/{% endraw %}{{
+                mint_id
+              }}{% raw %}'"
+              type="textarea"
+              autogrow
+              class="q-mb-xs"
+            ></q-input>
+            <p>
+              <q-btn
+                outline
+                icon="content_copy"
+                class="q-mt-md"
+                color="($q.dark.isActive) ? 'grey-7' : 'grey-5'"
+                label="Copy"
+                @click="copyText(mintURL.base_url + '/cashu/api/v1/{% endraw %}{{
+                  mint_id
+                }}{% raw %}')"
+              />
+            </p>
+          </center>
+          <q-card-section class="text-center">
+            <qrcode
+              :value="mintURL.base_url + '/cashu/api/v1/{% endraw %}{{
+                mint_id
+              }}{% raw %}'"
+              :options="{width:240}"
+              class="rounded-borders"
+            ></qrcode>
+          </q-card-section>
+        </q-card-section>
+      </q-card>
+      <q-card class="q-pa-lg q-mb-xl">
+        <q-card-section class="q-pa-none">
+          <h5 class="q-my-md">Read the following carefully!</h5>
+          <p>
+            This is a
+            <a
+              class="text-secondary"
+              href="https://cashu.space/"
+              style="color: white"
+              target="”_blank”"
+              >Cashu</a
+            >
+            mint. Cashu is an ecash system for Bitcoin.
+          </p>
+          <p>
+            <strong>Open this page in your native browser</strong><br />
+            Before you continue to the wallet, make sure to open this page in
+            your device's native browser application (Safari for iOS, Chrome for
+            Android). Do not use Cashu in an embedded browser that opens when
+            you click a link in a messenger.
+          </p>
+          <p>
+            <strong>Add wallet to home screen</strong><br />
+            You can add Cashu to your home screen as a progressive web app
+            (PWA). After opening the wallet in your browser (click the link
+            above), on Android (Chrome), click the menu at the upper right. On
+            iOS (Safari), click the share button. Now press the Add to Home
+            screen button.
+          </p>
+          <p>
+            <strong>Backup your wallet</strong><br />
+            Ecash is a bearer asset. That means losing access to your wallet
+            will make you lose your funds. The wallet stores ecash tokens on
+            your device's database. If you lose the link or delete your your
+            data without backing up, you will lose your tokens. Press the Backup
+            button in the wallet to download a copy of your tokens.
+          </p>
+          <p>
+            <strong>This service is in BETA</strong> <br />
+            Cashu is still experimental and in active development. There are
+            likely bugs in this implementation so please use this with caution.
+            We hold no responsibility for people losing access to funds. Use at
+            your own risk!
+          </p>
+        </q-card-section>
+      </q-card>
+    </div>
+  </div>
+</template>
+{% endraw %} {% endblock %} {% block scripts %}
+
+<script>
+  Vue.component(VueQrcode.name, VueQrcode)
+  new Vue({
+    el: '#vue',
+    mixins: [windowMixin],
+    data: function () {
+      return {
+        mintURL: {
+          location: window.location,
+          whole_url:
+            location.protocol + '//' + location.host + location.pathname,
+          base_url: location.protocol + '//' + location.host
+        }
+      }
+    }
+  })
+  console.log(this.testfield)
+</script>
+
+{% endblock %}
