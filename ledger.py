@@ -226,17 +226,16 @@ async def lnbits_melt_quote(
     Returns:
         PostMeltQuoteResponse: Melt quote response.
     """
-    unit = Unit[melt_quote.unit]
-    method = Method.bolt11
-    invoice_obj = bolt11.decode(melt_quote.request)
-    assert invoice_obj.amount_msat, "invoice has no amount."
+    unit, method = self._verify_and_get_unit_method(melt_quote.unit, Method.bolt11.name)
+
+    # NOTE: we normalize the request to lowercase to avoid case sensitivity
+    # This works with Lightning but might not work with other methods
+    request = melt_quote.request.lower()
 
     # check if there is a mint quote with the same payment request
-    # so that we can handle the transaction internally without lightning
-    # and respond with zero fees
-    mint_quote = await self.crud.get_mint_quote_by_checking_id(
-        checking_id=invoice_obj.payment_hash, db=self.db
-    )
+    # so that we would be able to handle the transaction internally
+    # and therefore respond with internal transaction fees (0 for now)
+    mint_quote = await self.crud.get_mint_quote_by_request(request=request, db=self.db)
     if mint_quote:
         # internal transaction, validate and return amount from
         # associated mint quote and demand zero fees
@@ -308,15 +307,15 @@ async def lnbits_get_melt_quote(self, quote_id: str, cashu: Cashu) -> MeltQuote:
         MeltQuote: Melt quote object.
     """
     melt_quote = await self.crud.get_melt_quote(quote_id=quote_id, db=self.db)
-    assert melt_quote, "quote not found"
-    assert melt_quote.method == Method.bolt11.name, "only bolt11 supported"
-    unit = Unit[melt_quote.unit]
-    method = Method[melt_quote.method]
+    if not melt_quote:
+        raise Exception("quote not found")
+
+    unit, method = self._verify_and_get_unit_method(melt_quote.unit, melt_quote.method)
 
     # we only check the state with the backend if there is no associated internal
     # mint quote for this melt quote
-    mint_quote = await self.crud.get_mint_quote_by_checking_id(
-        checking_id=melt_quote.checking_id, db=self.db
+    mint_quote = await self.crud.get_mint_quote_by_request(
+        request=melt_quote.request, db=self.db
     )
 
     if not melt_quote.paid and not mint_quote:
