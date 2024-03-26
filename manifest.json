@@ -3,8 +3,8 @@
     "repos": [
         {
             "id": "cashu",
-            "organisation": "lnbits",
-            "repository": "cashu"
+            "organisation": "cashubtc",
+            "repository": "lnbits-cashu"
         }
     ]
 }
