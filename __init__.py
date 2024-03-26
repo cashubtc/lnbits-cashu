@@ -37,7 +37,7 @@ ledger = Ledger(
     crud=LedgerCrudSqlite(),
 )
 
-settings.mint_private_key = ledger.master_key
+settings.mint_private_key = ledger.seed
 
 cashu_ext: APIRouter = APIRouter(prefix="/cashu", tags=["cashu"])
 

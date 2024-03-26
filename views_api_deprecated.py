@@ -340,7 +340,7 @@ async def melt_deprecated(
     # THIS IS NECESSARY BECAUSE THE CASHU BACKEND WILL ACCEPT ANY VALID
     # TOKENS
     accepted_keysets = [cashu.keyset_id]
-    if ledger.master_key:
+    if ledger.seed:
         # NOTE: bug fix, fee return tokens for v 0.3.1 are from the master keyset
         # we need to accept them but only if a master keyset is set, otherwise it's unsafe
         # to accept them.
@@ -447,7 +447,7 @@ async def split_deprecated(payload: PostSplitRequest_Deprecated, cashu_id: str):
     # THIS IS NECESSARY BECAUSE THE CASHU BACKEND WILL ACCEPT ANY VALID
     # TOKENS
     accepted_keysets = [cashu.keyset_id]
-    if ledger.master_key:
+    if ledger.seed:
         # NOTE: bug fix, fee return tokens for v 0.3.1 are from the master keyset
         # we need to accept them but only if a master keyset is set, otherwise it's unsafe
         # to accept them.

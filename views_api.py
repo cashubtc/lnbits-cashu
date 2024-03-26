@@ -525,7 +525,7 @@ async def melt(payload: PostMeltRequest, cashu_id: str) -> PostMeltResponse:
     # THIS IS NECESSARY BECAUSE THE CASHU BACKEND WILL ACCEPT ANY VALID
     # TOKENS
     accepted_keysets = [cashu.keyset_id]
-    if ledger.master_key:
+    if ledger.seed:
         # NOTE: bug fix, fee return tokens for v 0.3.1 are from the master keyset
         # we need to accept them but only if a master keyset is set, otherwise it's unsafe
         # to accept them.
@@ -578,7 +578,7 @@ async def swap(
     # THIS IS NECESSARY BECAUSE THE CASHU BACKEND WILL ACCEPT ANY VALID
     # TOKENS
     accepted_keysets = [cashu.keyset_id]
-    if ledger.master_key:
+    if ledger.seed:
         # NOTE: bug fix, fee return tokens for v 0.3.1 are from the master keyset
         # we need to accept them but only if a master keyset is set, otherwise it's unsafe
         # to accept them.
@@ -703,7 +703,7 @@ async def restore(payload: PostMintRequest, cashu_id: str) -> PostRestoreRespons
 #     # THIS IS NECESSARY BECAUSE THE CASHU BACKEND WILL ACCEPT ANY VALID
 #     # TOKENS
 #     accepted_keysets = [cashu.keyset_id]
-#     if ledger.master_key:
+#     if ledger.seed:
 #         # NOTE: bug fix, fee return tokens for v 0.3.1 are from the master keyset
 #         # we need to accept them but only if a master keyset is set, otherwise it's unsafe
 #         # to accept them.
