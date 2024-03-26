@@ -45,7 +45,7 @@ def derive_keys(mnemonic: str, derivation_path: str):
         }
 
 
-def derive_keys_sha256(master_key: str, derivation_path: str = ""):
+def derive_keys_sha256(seed: str, derivation_path: str = ""):
     """
     Deterministic derivation of keys for 2^n values.
     TODO: Implement BIP32.
@@ -53,18 +53,18 @@ def derive_keys_sha256(master_key: str, derivation_path: str = ""):
     return {
         2
         ** i: PrivateKey(
-            hashlib.sha256(
-                (master_key + derivation_path + str(i)).encode("utf-8")
-            ).digest()[:32],
+            hashlib.sha256((seed + derivation_path + str(i)).encode("utf-8")).digest()[
+                :32
+            ],
             raw=True,
         )
         for i in range(settings.max_order)
     }
 
 
-def derive_pubkey(master_key: str):
+def derive_pubkey(seed: str):
     return PrivateKey(
-        hashlib.sha256((master_key).encode("utf-8")).digest()[:32],
+        hashlib.sha256((seed).encode("utf-8")).digest()[:32],
         raw=True,
     ).pubkey
 
