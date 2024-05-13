@@ -619,7 +619,7 @@ async def check_state(
             status_code=HTTPStatus.NOT_FOUND, detail="Mint does not exist."
         )
     logger.trace(f"> POST /v1/checkstate: {payload}")
-    proof_states = await ledger.check_proofs_state(payload.secrets)
+    proof_states = await ledger.check_proofs_state(payload.Ys)
     return PostCheckStateResponse(states=proof_states)
 
 
